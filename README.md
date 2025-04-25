@@ -19,7 +19,7 @@ This project includes essential shopping features like product browsing, cart ma
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/ahmedalifarhan/fasco-ecommerce.git
+git clone https://github.com/ahmedalifarhan/ahmed-alifarhan-nextjs-test.git
 
 cd fasco-ecommerce
 ```
