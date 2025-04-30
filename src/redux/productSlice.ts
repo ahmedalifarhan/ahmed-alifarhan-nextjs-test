@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Product } from "@/types/product"; // Adjust the import path if needed
+import { Product } from "@/types/product"; // تأكد إن المسار صحيح حسب مشروعك
 
 interface ProductState {
   product: Product | null;
@@ -19,17 +19,26 @@ const productSlice = createSlice({
   name: "product",
   initialState,
   reducers: {
-    setProduct: (state, action: PayloadAction<Product>) => {
+    // ✅ تعيين بيانات المنتج
+    setProduct(state, action: PayloadAction<Product>) {
       state.product = action.payload;
       state.loading = false;
+      state.error = null;
     },
-    setLoading: (state, action: PayloadAction<boolean>) => {
+
+    // ✅ تعيين حالة التحميل
+    setLoading(state, action: PayloadAction<boolean>) {
       state.loading = action.payload;
     },
-    setError: (state, action: PayloadAction<string>) => {
+
+    // ✅ تعيين رسالة الخطأ
+    setError(state, action: PayloadAction<string>) {
       state.error = action.payload;
+      state.loading = false;
     },
-    setQuantity: (state, action: PayloadAction<number>) => {
+
+    // ✅ تحديث الكمية المطلوبة من المنتج
+    setQuantity(state, action: PayloadAction<number>) {
       state.quantity = action.payload;
     },
   },

@@ -3,23 +3,23 @@ import Link from "next/link";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/redux/store";
-
 import {
-  Menu,
-  X,
+  ShoppingCart,
   ChevronDown,
   Search,
   User,
   Heart,
-  ShoppingCart,
+  Menu,
+  X,
 } from "lucide-react";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isPagesOpen, setIsPagesOpen] = useState(false);
 
-  const cartItems = useSelector((state: RootState) => state.cart.items); // ✅ استخدام ريدكس
-  const totalQuantity = cartItems.reduce((acc, item) => acc + item.quantity, 0); // ✅ حساب العدد مباشرة
+  // استخدام الـ Redux لتحديد الكمية الإجمالية
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+  const totalQuantity = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
     <header className="w-full py-4 px-6 md:px-16 flex justify-between items-center bg-white relative z-50">
@@ -79,12 +79,10 @@ export default function Header() {
 
         {/* Cart with Quantity Badge */}
         <Link href="/cart" aria-label="Cart" className="relative">
-          <ShoppingCart size={20} className="text-gray-700" />
-          {totalQuantity > 0 && (
-            <span className="absolute top-[-10px] right-[-10px] bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-              {totalQuantity}
-            </span>
-          )}
+          <ShoppingCart size={24} className="text-gray-700" />
+          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+            {totalQuantity}
+          </span>
         </Link>
 
         {/* Mobile Menu Toggle */}

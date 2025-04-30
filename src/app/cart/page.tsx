@@ -1,59 +1,36 @@
+// src/pages/cart.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import PageTitle from "@/components/ui/PageTitle";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import Footer from "@/components/Footer";
-
-interface Product {
-  id: string;
-  title: string;
-  price: number;
-  originalPrice?: number;
-  description: string;
-  image: string;
-  rating: { rate: number; count: number };
-  stock: number;
-  quantity: number;
-}
+import {
+  increaseQuantity,
+  decreaseQuantity,
+  removeFromCart,
+} from "@/redux/cartSlice";
+import { RootState } from "@/redux/store";
+import { useState } from "react";
 
 export default function CartPage() {
-  const [cart, setCart] = useState<Product[]>([]);
-  const [wrapGift, setWrapGift] = useState(false);
+  const cart = useSelector((state: RootState) => state.cart.items);
+  const dispatch = useDispatch();
   const router = useRouter();
+  const [wrapGift, setWrapGift] = useState(false);
 
-  useEffect(() => {
-    const savedCart = localStorage.getItem("cart");
-    if (savedCart) setCart(JSON.parse(savedCart));
-  }, []);
-
-  const updateCart = (updatedCart: Product[]) => {
-    setCart(updatedCart);
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
+  const handleIncrease = (id: string) => {
+    dispatch(increaseQuantity(id));
   };
 
-  const handleIncrease = (productId: string) => {
-    updateCart(
-      cart.map((item) =>
-        item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
-      )
-    );
+  const handleDecrease = (id: string) => {
+    dispatch(decreaseQuantity(id));
   };
 
-  const handleDecrease = (productId: string) => {
-    updateCart(
-      cart.map((item) =>
-        item.id === productId && item.quantity > 1
-          ? { ...item, quantity: item.quantity - 1 }
-          : item
-      )
-    );
-  };
-
-  const handleRemove = (productId: string) => {
-    updateCart(cart.filter((item) => item.id !== productId));
+  const handleRemove = (id: string) => {
+    dispatch(removeFromCart(id));
   };
 
   const calculateSubtotal = () =>

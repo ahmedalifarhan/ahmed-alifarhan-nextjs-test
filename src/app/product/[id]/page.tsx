@@ -1,9 +1,12 @@
+// src/pages/product/[id].tsx
 "use client";
 
 import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Truck, Package, Share2 } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../../redux/cartSlice";
 import trustbag from "../../trustbag.png";
 
 interface Product {
@@ -20,22 +23,22 @@ interface Product {
 
 export default function ProductPage() {
   const router = useRouter();
-  const params = useParams();
+  const { id } = useParams();
+  const dispatch = useDispatch();
+
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
-    if (!params.id) return;
+    if (!id) return;
 
     const fetchProduct = async () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(
-          `https://fakestoreapi.com/products/${params.id}`
-        );
+        const response = await fetch(`https://fakestoreapi.com/products/${id}`);
         if (!response.ok) throw new Error("Failed to fetch product");
         const data = await response.json();
         setProduct({
@@ -58,7 +61,7 @@ export default function ProductPage() {
     };
 
     fetchProduct();
-  }, [params.id]);
+  }, [id]);
 
   const handleIncrease = () => {
     if (quantity < (product?.stock || 0)) setQuantity(quantity + 1);
@@ -69,25 +72,10 @@ export default function ProductPage() {
   };
 
   const handleAddToCart = () => {
-    if (!product) return;
-
-    const savedCart = localStorage.getItem("cart");
-    const existingCart: Product[] = savedCart ? JSON.parse(savedCart) : [];
-
-    const existingProduct = existingCart.find((item) => item.id === product.id);
-
-    let updatedCart;
-    if (existingProduct) {
-      updatedCart = existingCart.map((item) =>
-        item.id === product.id
-          ? { ...item, quantity: (item.quantity || 1) + quantity }
-          : item
-      );
-    } else {
-      updatedCart = [...existingCart, { ...product, quantity }];
+    if (product) {
+      dispatch(addToCart({ ...product, quantity }));
+      setQuantity(1);
     }
-
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
   if (loading) {
@@ -230,9 +218,12 @@ export default function ProductPage() {
 
             <button
               onClick={handleAddToCart}
-              className="flex-1 px-6 py-3 border border-black text-black rounded-md text-lg font-medium hover:bg-black hover:text-white transition-all"
+              disabled={quantity > product.stock}
+              className={`flex-1 px-6 py-3 border border-black text-black rounded-md text-lg font-medium hover:bg-black hover:text-white transition-all ${
+                quantity > product.stock ? "bg-gray-400 cursor-not-allowed" : ""
+              }`}
             >
-              Add to cart
+              {quantity > product.stock ? "Out of Stock" : "Add to Cart"}
             </button>
           </div>
 
