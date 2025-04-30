@@ -1,5 +1,7 @@
 # Fasco – E-Commerce Store 🛍️
 
+🌍 **Live Demo:** [https://ahmed-ali-farhan-nextjs-test.vercel.app](https://ahmed-ali-farhan-nextjs-test.vercel.app)
+
 A modern, responsive, and stylish e-commerce application built with **Next.js 14**, **TypeScript**, **Tailwind CSS**, **Redux Toolkit**, and **Lucide Icons**.  
 This project includes essential shopping features like product browsing, cart management, and responsive UI.
 
