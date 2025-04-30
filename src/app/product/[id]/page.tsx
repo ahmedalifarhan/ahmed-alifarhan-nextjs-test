@@ -1,4 +1,3 @@
-// src/pages/product/[id].tsx
 "use client";
 
 import { useRouter, useParams } from "next/navigation";
@@ -8,6 +7,8 @@ import { Truck, Package, Share2 } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../../redux/cartSlice";
 import trustbag from "../../trustbag.png";
+import "react-toastify/dist/ReactToastify.css"; // Importing toast styles
+import { ToastContainer, toast } from "react-toastify"; // Importing ToastContainer correctly
 
 interface Product {
   id: string;
@@ -75,6 +76,9 @@ export default function ProductPage() {
     if (product) {
       dispatch(addToCart({ ...product, quantity }));
       setQuantity(1);
+
+      // Show toast notification after adding product to cart
+      toast.success(`${product.title} added to cart!`);
     }
   };
 
@@ -190,7 +194,7 @@ export default function ProductPage() {
               <button
                 onClick={handleDecrease}
                 disabled={quantity <= 1}
-                className={`text-xl font-semibold w-8 h-8 flex items-center justify-center rounded-full ${
+                className={`text-xl font-semibold w-8 h-8 flex items-center justify-center rounded-full btn-animate ${
                   quantity <= 1
                     ? "text-gray-400 cursor-not-allowed"
                     : "text-gray-700 hover:bg-gray-100 hover:text-black"
@@ -206,7 +210,7 @@ export default function ProductPage() {
               <button
                 onClick={handleIncrease}
                 disabled={quantity >= product.stock}
-                className={`text-xl font-semibold w-8 h-8 flex items-center justify-center rounded-full ${
+                className={`text-xl font-semibold w-8 h-8 flex items-center justify-center rounded-full btn-animate ${
                   quantity >= product.stock
                     ? "text-gray-400 cursor-not-allowed"
                     : "text-gray-700 hover:bg-gray-100 hover:text-black"
@@ -266,6 +270,9 @@ export default function ProductPage() {
           </div>
         </div>
       </div>
+
+      {/* Toast Container */}
+      <ToastContainer />
     </div>
   );
 }

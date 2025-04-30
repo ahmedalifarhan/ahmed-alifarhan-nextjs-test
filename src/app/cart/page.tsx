@@ -1,4 +1,3 @@
-// src/pages/cart.tsx
 "use client";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -14,6 +13,9 @@ import {
 } from "@/redux/cartSlice";
 import { RootState } from "@/redux/store";
 import { useState } from "react";
+import { toast, ToastContainer } from "react-toastify"; // Import toast
+import "react-toastify/dist/ReactToastify.css"; // Import styles
+import Swal from "sweetalert2"; // Import SweetAlert2
 
 export default function CartPage() {
   const cart = useSelector((state: RootState) => state.cart.items);
@@ -23,14 +25,32 @@ export default function CartPage() {
 
   const handleIncrease = (id: string) => {
     dispatch(increaseQuantity(id));
+    toast.success("Quantity increased!"); // Show success notification
   };
 
   const handleDecrease = (id: string) => {
     dispatch(decreaseQuantity(id));
+    toast.info("Quantity decreased."); // Show info notification
   };
 
   const handleRemove = (id: string) => {
-    dispatch(removeFromCart(id));
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "No, keep it",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Remove item from cart if user confirms
+        dispatch(removeFromCart(id));
+        toast.error("Item removed from cart."); // Show error notification
+        Swal.fire("Deleted!", "Your item has been deleted.", "success");
+      }
+    });
   };
 
   const calculateSubtotal = () =>
@@ -104,7 +124,7 @@ export default function CartPage() {
                         <div className="flex items-center border rounded w-fit">
                           <button
                             onClick={() => handleDecrease(product.id)}
-                            className="px-3 py-1 text-xl text-gray-600 hover:text-black"
+                            className="px-3 py-1 text-xl text-gray-600 hover:text-black btn-animate"
                           >
                             −
                           </button>
@@ -113,7 +133,7 @@ export default function CartPage() {
                           </span>
                           <button
                             onClick={() => handleIncrease(product.id)}
-                            className="px-3 py-1 text-xl text-gray-600 hover:text-black"
+                            className="px-3 py-1 text-xl text-gray-600 hover:text-black btn-animate"
                           >
                             +
                           </button>
@@ -168,7 +188,7 @@ export default function CartPage() {
                     <div className="flex items-center border rounded">
                       <button
                         onClick={() => handleDecrease(product.id)}
-                        className="px-3 py-1 text-xl text-gray-600 hover:text-black"
+                        className="px-3 py-1 text-xl text-gray-600 hover:text-black btn-animate"
                       >
                         −
                       </button>
@@ -177,7 +197,7 @@ export default function CartPage() {
                       </span>
                       <button
                         onClick={() => handleIncrease(product.id)}
-                        className="px-3 py-1 text-xl text-gray-600 hover:text-black"
+                        className="px-3 py-1 text-xl text-gray-600 hover:text-black btn-animate"
                       >
                         +
                       </button>
@@ -223,6 +243,9 @@ export default function CartPage() {
       </div>
 
       <Footer />
+
+      {/* Add ToastContainer to show notifications */}
+      <ToastContainer />
     </>
   );
 }

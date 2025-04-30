@@ -1,1 +1,26 @@
 @import "tailwindcss";
+/* إضافة تأثير التحريك على الأزرار */
+.increase-btn, .decrease-btn {
+  transition: transform 0.3s ease;
+}
+
+.increase-btn:hover, .decrease-btn:hover {
+  transform: scale(1.1);
+}
+
+.increase-btn:active, .decrease-btn:active {
+  transform: scale(0.95);
+}
+
+/* إضافة تأثير الاهتزاز عند حذف العنصر */
+.delete-btn {
+  transition: transform 0.3s ease;
+}
+
+.delete-btn:hover {
+  transform: scale(1.1) rotate(10deg);
+}
+
+.delete-btn:active {
+  transform: rotate(-10deg);
+}
