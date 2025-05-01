@@ -1,5 +1,4 @@
 "use client";
-// import Header from "@/components/Header";
 import "../styles/globals.css";
 import PageTitle from "@/components/ui/PageTitle";
 import Breadcrumb from "@/components/ui/Breadcrumb";
@@ -22,8 +21,8 @@ export default function Home() {
       <PageTitle title="Fashion" />
       <Breadcrumb current="Fashion" />
 
-      <div className="w-full max-w-[1200px] mx-auto px-4 mt-[100px] flex justify-between items-start relative">
-        <div className="w-full">
+      <div className="w-full max-w-[1200px] mx-auto px-4 mt-[100px] flex flex-wrap justify-between items-start relative">
+        <div className="w-full lg:w-9/12">
           <BestSellingDropdown>
             {loading ? (
               <p className="text-center mt-4">Loading...</p>
@@ -44,7 +43,8 @@ export default function Home() {
           </BestSellingDropdown>
         </div>
 
-        <div className="absolute top-[-50px] right-0">
+        {/* View Style Switcher positioned correctly on larger screens */}
+        <div className="absolute top-[-50px] right-0 lg:relative lg:top-0 lg:right-0 lg:block">
           <ViewStyleSwitcher activeView={view} onChange={setView} />
         </div>
       </div>
